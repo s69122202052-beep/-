@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หมวดหมู่สถานที่ | ท่องทั่วไทย</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                <path d="M21 10.5l-3-1.5-2 4 1.5 2.5-3.5 1.5-1-6.5-2-1-1 6.5-3.5-1.5L8 12l-2-4-3 1.5v2l3.5 2.5 1 6.5 4.5-2 4.5 2 1-6.5 3.5-2.5v-2z" fill="white" opacity="0.3"/>
+            </svg>
+            <h1 class="logo-text">ท่องทั่วไทย</h1>
+        </div>
+        <p class="subtitle">ระบบค้นหาเส้นทางและจองตั๋วการเดินทาง (Graph & Tree Application)</p>
+    </header>
+
+    <nav>
+        <a href="index.html">หน้าแรก</a>
+        <a href="route.html">จองตั๋วเดินทาง (Graph)</a>
+        <a href="tree.html">หมวดหมู่สถานที่ (Tree)</a>
+        <a href="about.html">เกี่ยวกับโครงงาน</a>
+    </nav>
+
+    <div class="container">
+        <h2>หมวดหมู่สถานที่ท่องเที่ยว (Tree Structure)</h2>
+        <p>ใช้โครงสร้าง Tree เพื่อจัดกลุ่มสถานที่ท่องเที่ยวจากระดับภูมิภาคลงไปจนถึงสถานที่ปลายทาง</p>
+        <div id="treeContainer" class="route-box"></div>
+    </div>
+
+    <script>
+        const touristTree = {
+            name: "ประเทศไทย (Root)",
+            children: [
+                {
+                    name: "ภาคเหนือ (Parent)",
+                    children: [
+                        {
+                            name: "เชียงใหม่ (Child)",
+                            children: [
+                                { name: "ดอยอินทนนท์ (Leaf)", isLeaf: true },
+                                { name: "ประตูท่าแพ (Leaf)", isLeaf: true }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "ภาคใต้ (Parent)",
+                    children: [
+                        {
+                            name: "ภูเก็ต (Child)",
+                            children: [
+                                { name: "แหลมพรหมเทพ (Leaf)", isLeaf: true },
+                                { name: "หาดป่าตอง (Leaf)", isLeaf: true }
+                            ]
+                        },
+                        {
+                            name: "สุราษฎร์ธานี (Child)",
+                            children: [
+                                { name: "เกาะสมุย (Leaf)", isLeaf: true },
+                                { name: "เขื่อนเชี่ยวหลาน (Leaf)", isLeaf: true }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "ภาคอีสาน (Parent)",
+                    children: [
+                        {
+                            name: "ขอนแก่น (Child)",
+                            children: [
+                                { name: "บึงแก่นนคร (Leaf)", isLeaf: true },
+                                { name: "พระมหาธาตุแก่นนคร (Leaf)", isLeaf: true }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "ภาคกลาง (Parent)",
+                    children: [
+                        {
+                            name: "อยุธยา (Child)",
+                            children: [
+                                { name: "วัดมหาธาตุ (Leaf)", isLeaf: true }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function renderTree(node) {
+            let html = `<li><span class="${node.isLeaf ? 'leaf' : ''}">${node.name}</span>`;
+            if (node.children && node.children.length > 0) {
+                html += `<ul class="tree-list">`;
+                node.children.forEach(child => {
+                    html += renderTree(child);
+                });
+                html += `</ul>`;
+            }
+            html += `</li>`;
+            return html;
+        }
+
+        document.getElementById('treeContainer').innerHTML = `<ul class="tree-list">${renderTree(touristTree)}</ul>`;
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จองตั๋วเดินทาง | ท่องทั่วไทย</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                <path d="M21 10.5l-3-1.5-2 4 1.5 2.5-3.5 1.5-1-6.5-2-1-1 6.5-3.5-1.5L8 12l-2-4-3 1.5v2l3.5 2.5 1 6.5 4.5-2 4.5 2 1-6.5 3.5-2.5v-2z" fill="white" opacity="0.3"/>
+            </svg>
+            <h1 class="logo-text">ท่องทั่วไทย</h1>
+        </div>
+        <p class="subtitle">ระบบค้นหาเส้นทางและจองตั๋วการเดินทาง (Graph & Tree Application)</p>
+    </header>
+
+    <nav>
+        <a href="index.html">หน้าแรก</a>
+        <a href="route.html">จองตั๋วเดินทาง (Graph)</a>
+        <a href="tree.html">หมวดหมู่สถานที่ (Tree)</a>
+        <a href="about.html">เกี่ยวกับโครงงาน</a>
+    </nav>
+
+    <div class="container">
+        <h2>ค้นหาและจองตั๋ว (Weighted Graph)</h2>
+        <p>ระบบใช้โครงสร้าง Graph ในการจัดเก็บข้อมูลจังหวัด โดยมี <strong>น้ำหนัก (Weight)</strong> คือระยะทาง (กิโลเมตร) และราคาตั๋ว (บาท)</p>
+        
+        <div class="search-box">
+            <label>จุดเริ่มต้น: </label>
+            <select id="startNode">
+                <option value="กรุงเทพฯ">กรุงเทพฯ</option>
+                <option value="อยุธยา">อยุธยา</option>
+                <option value="เชียงใหม่">เชียงใหม่</option>
+                <option value="ภูเก็ต">ภูเก็ต</option>
+                <option value="ขอนแก่น">ขอนแก่น</option>
+                <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+            </select>
+            
+            <label> ปลายทาง: </label>
+            <select id="endNode">
+                <option value="เชียงใหม่" selected>เชียงใหม่</option>
+                <option value="ภูเก็ต">ภูเก็ต</option>
+                <option value="กรุงเทพฯ">กรุงเทพฯ</option>
+                <option value="ขอนแก่น">ขอนแก่น</option>
+                <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+            </select>
+            <button class="btn-search" onclick="findRoute()">ค้นหาเส้นทาง</button>
+        </div>
+
+        <div id="routeResult" class="route-box" style="display: none;"></div>
+    </div>
+
+    <script>
+        const routeGraph = {
+            "กรุงเทพฯ": [
+                { node: "อยุธยา", vehicle: "รถไฟ", distance: 80, price: 50 },
+                { node: "เชียงใหม่", vehicle: "รถไฟ", distance: 680, price: 800 },
+                { node: "เชียงใหม่", vehicle: "เครื่องบิน", distance: 600, price: 1500 },
+                { node: "ภูเก็ต", vehicle: "เครื่องบิน", distance: 850, price: 1200 },
+                { node: "ขอนแก่น", vehicle: "เครื่องบิน", distance: 450, price: 1000 },
+                { node: "สุราษฎร์ธานี", vehicle: "รถไฟ", distance: 650, price: 600 }
+            ],
+            "อยุธยา": [
+                { node: "กรุงเทพฯ", vehicle: "รถไฟ", distance: 80, price: 50 },
+                { node: "เชียงใหม่", vehicle: "รถไฟ", distance: 600, price: 750 }
+            ],
+            "เชียงใหม่": [
+                { node: "กรุงเทพฯ", vehicle: "รถไฟ", distance: 680, price: 800 },
+                { node: "กรุงเทพฯ", vehicle: "เครื่องบิน", distance: 600, price: 1500 },
+                { node: "ภูเก็ต", vehicle: "เครื่องบิน", distance: 1500, price: 2500 }
+            ],
+            "ภูเก็ต": [
+                { node: "กรุงเทพฯ", vehicle: "เครื่องบิน", distance: 850, price: 1200 },
+                { node: "เชียงใหม่", vehicle: "เครื่องบิน", distance: 1500, price: 2500 },
+                { node: "สุราษฎร์ธานี", vehicle: "รถไฟ", distance: 250, price: 300 }
+            ],
+            "ขอนแก่น": [
+                { node: "กรุงเทพฯ", vehicle: "เครื่องบิน", distance: 450, price: 1000 }
+            ],
+            "สุราษฎร์ธานี": [
+                { node: "กรุงเทพฯ", vehicle: "รถไฟ", distance: 650, price: 600 },
+                { node: "ภูเก็ต", vehicle: "รถไฟ", distance: 250, price: 300 }
+            ]
+        };
+
+        function findRoute() {
+            const start = document.getElementById('startNode').value;
+            const end = document.getElementById('endNode').value;
+            const resultBox = document.getElementById('routeResult');
+            
+            if (start === end) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = "<p style='color:red;'>จุดเริ่มต้นและปลายทางเป็นสถานที่เดียวกัน โปรดเลือกใหม่</p>";
+                return;
+            }
+
+            let htmlContent = `<h3 style="color: var(--primary-purple);">ผลการค้นหาเส้นทาง: ${start} ➔ ${end}</h3>`;
+            let found = false;
+
+            if (routeGraph[start]) {
+                const directRoutes = routeGraph[start].filter(edge => edge.node === end);
+                if (directRoutes.length > 0) {
+                    found = true;
+                    directRoutes.forEach((route, index) => {
+                        htmlContent += `
+                            <div class="route-item">
+                                <p><span class="data-label">ตัวเลือกที่ ${index + 1}:</span></p>
+                                <p><span class="data-label">พาหนะ:</span> ${route.vehicle}</p>
+                                <p><span class="data-label">ระยะทาง:</span> ${route.distance} กิโลเมตร</p>
+                                <p><span class="data-label">ราคาสุทธิ:</span> <span class="price-tag">${route.price} บาท</span></p>
+                                <button class="btn-buy" onclick="buyTicket('${start}', '${end}', '${route.vehicle}', ${route.distance}, ${route.price})">ชำระเงินและออกตั๋ว</button>
+                            </div>
+                        `;
+                    });
+                } else {
+                    for (let edge of routeGraph[start]) {
+                        const nextNode = edge.node;
+                        if (routeGraph[nextNode]) {
+                            const nextRoute = routeGraph[nextNode].find(e => e.node === end);
+                            if (nextRoute) {
+                                const totalDistance = edge.distance + nextRoute.distance;
+                                const totalPrice = edge.price + nextRoute.price;
+                                htmlContent += `
+                                    <div class="route-item">
+                                        <p><span class="data-label">ต้องต่อจุดพัก (จุดเชื่อมต่อ: ${nextNode})</span></p>
+                                        <p>1. ${start} ➔ ${nextNode} (${edge.vehicle}, ${edge.distance} กม.)</p>
+                                        <p>2. ${nextNode} ➔ ${end} (${nextRoute.vehicle}, ${nextRoute.distance} กม.)</p>
+                                        <p><span class="data-label">ระยะทางรวม:</span> ${totalDistance} กิโลเมตร</p>
+                                        <p><span class="data-label">ราคาสุทธิ:</span> <span class="price-tag">${totalPrice} บาท</span></p>
+                                        <button class="btn-buy" onclick="buyTicket('${start}', '${end}', 'ตั๋วเดินทางต่อเนื่อง (${nextNode})', ${totalDistance}, ${totalPrice})">ชำระเงินและออกตั๋วทั้ง 2 เส้นทาง</button>
+                                    </div>
+                                `;
+                                found = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            resultBox.style.display = 'block';
+            if (found) {
+                resultBox.innerHTML = htmlContent;
+            } else {
+                resultBox.innerHTML = "<p>ไม่พบเส้นทางที่เลือกในระบบฐานข้อมูล กรุณาลองเปลี่ยนเส้นทางใหม่</p>";
+            }
+        }
+
+        function buyTicket(start, end, vehicle, distance, price) {
+            alert(`--- ยืนยันการชำระเงินสำเร็จ ---\n\nเส้นทาง: ${start} ➔ ${end}\nพาหนะที่ใช้: ${vehicle}\nระยะทางการเดินทาง: ${distance} กิโลเมตร\nยอดชำระสุทธิ: ${price} บาท\n\nขอให้มีความสุขกับการเดินทางครับ!`);
+        }
+    </script>
+</body>
+</html>

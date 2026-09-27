@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกี่ยวกับโครงงาน | ท่องทั่วไทย</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                <path d="M21 10.5l-3-1.5-2 4 1.5 2.5-3.5 1.5-1-6.5-2-1-1 6.5-3.5-1.5L8 12l-2-4-3 1.5v2l3.5 2.5 1 6.5 4.5-2 4.5 2 1-6.5 3.5-2.5v-2z" fill="white" opacity="0.3"/>
+            </svg>
+            <h1 class="logo-text">ท่องทั่วไทย</h1>
+        </div>
+        <p class="subtitle">ระบบค้นหาเส้นทางและจองตั๋วการเดินทาง (Graph & Tree Application)</p>
+    </header>
+
+    <nav>
+        <a href="index.html">หน้าแรก</a>
+        <a href="route.html">จองตั๋วเดินทาง (Graph)</a>
+        <a href="tree.html">หมวดหมู่สถานที่ (Tree)</a>
+        <a href="about.html">เกี่ยวกับโครงงาน</a>
+    </nav>
+
+    <div class="container">
+        <h2>เกี่ยวกับโครงงาน</h2>
+        <p><strong>หัวข้อ:</strong> Graph Theory และ Tree | Discrete Mathematics for IT</p>
+        <ul>
+            <li><strong>Graph Theory:</strong> 
+                <ul>
+                    <li>Vertex (จุดยอด): กรุงเทพฯ, อยุธยา, เชียงใหม่, ภูเก็ต, ขอนแก่น, สุราษฎร์ธานี (รวม 6 จุด)</li>
+                    <li>Edge (เส้นเชื่อม): เส้นทางยานพาหนะ (รถไฟ, เครื่องบิน) (มากกว่า 7 เส้นทาง)</li>
+                    <li>Weight: ประยุกต์ใช้เป็น ระยะทาง (กิโลเมตร) และ ราคาตั๋ว (บาท)</li>
+                </ul>
+            </li>
+            <li><strong>Tree:</strong> แสดงโครงสร้างสถานที่ท่องเที่ยวโดยแยกเป็น Root (ประเทศไทย) &rarr; Parent (ภูมิภาค) &rarr; Child (จังหวัด) &rarr; Leaf (สถานที่ท่องเที่ยว) (โครงสร้าง 4 ระดับ)</li>
+        </ul>
+        <div style="margin-top: 20px; padding: 15px; background-color: #fcf9ff; border-left: 4px solid var(--primary-purple);">
+            <p><strong>เป้าหมายของโครงงาน:</strong> นำเสนอการประยุกต์ใช้โครงสร้างข้อมูลแบบกราฟและทรีในระบบแนะนำและขายตั๋วการเดินทางจริง[cite: 1]</p>
+        </div>
+    </div>
+</body>
+</html>
